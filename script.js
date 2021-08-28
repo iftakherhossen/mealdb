@@ -1,4 +1,6 @@
 document.getElementById('error-message').style.display = 'none';
+document.getElementById('loader-display').style.display = 'none';
+
 const searchFood = () => {
     const searchField = document.getElementById('search-field');
     const searchText = searchField.value;
@@ -20,17 +22,24 @@ const displayError = error => {
     document.getElementById('error-message').style.display = 'block';
 };
 
+const displayLoader = loader => {
+    document.getElementById('loader').style.display = 'flex';
+};
+
 const displaySearchResult = meals => {
+    
     const searchResult = document.getElementById('search-result');
     searchResult.textContent = '';
-    if (meals.length == 0) {
-        window.alert('No result found!');
+
+    if (meals == null || meals.length == 0) {
+        alert('No result found!');
+        return;
     }
-    else {
-        meals.forEach(meal => {
-            const div = document.createElement('div');
-            div.classList.add('col');
-            div.innerHTML = `
+
+    meals.forEach(meal => {
+        const div = document.createElement('div');
+        div.classList.add('col');
+        div.innerHTML = `
             <div onclick="loadMealDetail(${meal.idMeal})" class="card h-100">
                 <img src="${meal.strMealThumb}" class="card-img-top" alt="Meal">
                 <div class="card-body">
@@ -39,9 +48,9 @@ const displaySearchResult = meals => {
                 </div>
             </div>
             `;
-            searchResult.appendChild(div);
-        });
-    }
+        searchResult.appendChild(div);
+    });
+
 };
 
 const loadMealDetail = mealId => {
@@ -51,7 +60,9 @@ const loadMealDetail = mealId => {
         .then(data => displayMealDetail(data.meals[0]));
 };
 
+document.getElementById('meal-details').style.display = 'none';
 const displayMealDetail = meal => {
+    document.getElementById('meal-details').style.display = 'block';
     const mealDetails = document.getElementById('meal-details');
     mealDetails.textContent = '';
     const div = document.createElement('div');
